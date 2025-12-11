@@ -6,7 +6,7 @@ from transformers import AutoTokenizer
 import pandas
 import config
 from sklearn.metrics import cohen_kappa_score, f1_score, confusion_matrix
-from utils import format_baseline_log, format_model_performance, setup_logger
+from utils import format_model_performance, setup_logger
 from baseline import fit_eval_baseline
 
 logger = setup_logger()

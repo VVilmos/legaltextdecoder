@@ -1,6 +1,5 @@
 import os
 import json
-import glob
 import pandas
 import re
 import tempfile
@@ -8,8 +7,7 @@ import zipfile
 import shutil
 import requests
 import config
-from utils import setup_logger, format_config_log
-from sklearn.model_selection import train_test_split
+from utils import setup_logger
 import numpy
 
 logger = setup_logger()

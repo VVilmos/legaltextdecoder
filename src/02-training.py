@@ -5,13 +5,12 @@ import pandas
 from utils import setup_logger, format_config_log, format_epoch_log
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoTokenizer
 from torch.optim import AdamW
 from models import LeanDeepHubert, HungarianTextDataset
 from sklearn.metrics import cohen_kappa_score
-import os
 
 logger = setup_logger()
 

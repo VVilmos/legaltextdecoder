@@ -1,15 +1,10 @@
 import pandas
 import re
-
-import matplotlib.pyplot as plt
-import numpy as np
-import plotly.express as px
 import logging
 
 from utils import format_baseline_performance
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay, cohen_kappa_score, f1_score
+from sklearn.metrics import confusion_matrix, cohen_kappa_score, f1_score
 from sklearn.preprocessing import StandardScaler
 
 logger = logging.getLogger(__name__)
