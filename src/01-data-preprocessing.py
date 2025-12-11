@@ -88,6 +88,8 @@ def extract_data(all_data):
     return df
 
 if __name__ == "__main__":
+    logger.info("***************** Data Preprocessing Started *************************")
+    logger.info(" ****************************** DATA PREPROCESSING STARTED ******************************")
     data = load_json()
     df = extract_data(data)
     # df.to_csv(config.TRAINING_DATA_PATH)
@@ -96,7 +98,6 @@ if __name__ == "__main__":
     df.to_csv(config.RAW_DATA_PATH, index=False)
     logger.info(f"Raw data saved for analysis to '{config.RAW_DATA_PATH}'.")
     logger.info("Processing training data...")
-    logger.info(format_config_log(config, "cuuuudaaa"))
     df["label"] = df["label"] -1
     logger.info("Transforming labels by subtracting 1 to make them zero-based.")
 

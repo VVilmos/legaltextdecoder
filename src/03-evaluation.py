@@ -1,26 +1,48 @@
 # Model evaluation script
 # This script evaluates the trained model on the test set and generates metrics.
-from utils import setup_logger
 import torch
+from models import LeanDeepHubert, HungarianTextDataset
+from transformers import AutoTokenizer
+import pandas
+import config
+from sklearn.metrics import cohen_kappa_score, f1_score, confusion_matrix
+from utils import format_baseline_log, format_model_performance, setup_logger
+from baseline import fit_eval_baseline
 
 logger = setup_logger()
 
-def evaluate():
-    logger.info("Evaluating model...")
-
 if __name__ == "__main__":
-    evaluate()
 
-def validate():
+  logger.info(" ****************************** EVALUATION STARTED ******************************")
 
+  y_pred, y_test = fit_eval_baseline()  # it prints the results
+
+  model = LeanDeepHubert(config.MODEL_NAME, num_labels = config.NUM_LABELS)
+  model.load_state_dict(torch.load(config.MODEL_SAVE_PATH))
+  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+  model.to(device)
+  logger.info(f"Model parameters loaded from {config.MODEL_SAVE_PATH} for evaluation.")
+  logger.info("Loading tokenizer...")
+  tokenizer = AutoTokenizer.from_pretrained(config.TOKENIZER_SAVE_PATH)
+  logger.info(f"Tokenizer loaded from {config.TOKENIZER_SAVE_PATH}.")
   model.eval()
   total_val_loss = 0
   total_correct_predictions = 0
-  all_labels = []
-  all_predictions = []
+  y_test = []
+  y_pred = []
 
+  logger.info("Preparing test dataloader...")
+  df = pandas.read_csv(config.TEST_DATA_PATH)
+  test_dataset = HungarianTextDataset(
+      texts=df["paragraph"].tolist(),
+      labels=df["label"].tolist(),
+      tokenizer=tokenizer
+  )
+  test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=config.BATCH_SIZE, shuffle=False)
+  logger.info("Testloader ready, starting evaluation of fine-tuned huBERT model...")
+  criterion = torch.nn.CrossEntropyLoss()
   with torch.no_grad():
-    for batch in val_loader:
+    for batch in test_loader:
       input_ids = batch["input_ids"].to(device)
       mask = batch["attention_mask"].to(device)
       labels = batch["labels"].to(device)
@@ -35,14 +57,18 @@ def validate():
       total_correct_predictions += (predictions == labels).sum().item()
 
       # Store labels and predictions for Kappa calculation
-      all_labels.extend(labels.cpu().numpy())
-      all_predictions.extend(predictions.cpu().numpy())
+      y_test.extend(labels.cpu().numpy())
+      y_pred.extend(predictions.cpu().numpy())
+      
+      break
 
 
-  val_loss = total_val_loss / len(val_loader)
-  val_acc = total_correct_predictions / len(val_dataset) * 100  # Accuracy as a percentage
+  test_loss = total_val_loss / len(test_loader)
+  test_acc = total_correct_predictions / len(test_dataset) * 100 
 
   # Calculate Quadratic Weighted Cohen Kappa score
-  kappa = cohen_kappa_score(all_labels, all_predictions, weights='quadratic')
+  kappa = cohen_kappa_score(y_test, y_pred, weights='quadratic')
+  f1 = f1_score(y_test, y_pred, average="weighted")
+  cm = confusion_matrix(y_test, y_pred)
 
-  return val_loss, val_acc, kappa
+  logger.info(format_model_performance(test_loss=test_loss, test_acc=test_acc, f1=f1, kappa=kappa, conf_matrix=cm))

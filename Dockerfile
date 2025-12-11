@@ -18,6 +18,8 @@ COPY run.sh run.sh
 
 # Create a directory for data (to be mounted)
 RUN mkdir -p /app/data
+RUN mkdir -p /app/output/model
+RUN mkdir -p /app/output/tokenizer
 RUN chmod +x /app/run.sh || true
 
 # Set the entrypoint to run the training script by default

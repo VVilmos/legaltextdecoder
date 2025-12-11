@@ -70,7 +70,6 @@ Evaluation metrics: Recall on rare labels, [Quadratic Cohen cappa score](https:/
 ### Docker Instructions
 
 This project is containerized using Docker. Follow the instructions below to build and run the solution.
-[Adjust the commands that show how do build your container and run it with log output.]
 
 #### Build
 

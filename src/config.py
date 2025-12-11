@@ -8,9 +8,9 @@ HIDDEN_SIZE = 128
 DROPOUT_RATE = 0.4
 
 # Training hyperparameters
-BATCH_SIZE = 16
+BATCH_SIZE = 4
 LEARNING_RATE = 2e-5
-NUM_EPOCHS = 3
+NUM_EPOCHS = 1
 OPTIMIZER = "AdamW"
 LOSS_FUNCTION = "CrossEntropyLoss"
 
@@ -28,8 +28,8 @@ DATA_URL = "https://bmeedu-my.sharepoint.com/:u:/g/personal/gyires-toth_balint_v
 TRAINING_DATA_PATH = "./data/training.csv"
 TEST_DATA_PATH = "./data/test.csv"
 RAW_DATA_PATH = "./data/raw_data.csv"
-MODEL_SAVE_PATH = "./model/deephubert_state.bin"
-TOKENIZER_SAVE_PATH = "./tokenizer/leanhubert"
+MODEL_SAVE_PATH = "./output/model/deephubert_state.bin"
+TOKENIZER_SAVE_PATH = "./output/tokenizer/leanhubert"
 
 # Logging
 LOG_INTERVAL = 10  # Log every N batches

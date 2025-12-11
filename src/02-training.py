@@ -9,62 +9,12 @@ from torch.utils.data import DataLoader, Dataset
 from sklearn.model_selection import train_test_split
 from transformers import AutoTokenizer, AutoModel
 from torch.optim import AdamW
+from models import LeanDeepHubert, HungarianTextDataset
+from sklearn.metrics import cohen_kappa_score
+import os
 
 logger = setup_logger()
 
-class LeanDeepHubert(nn.Module):
-    def __init__(self, model_name, num_labels):
-        super().__init__()
-        logger.info(f"Fetching pre-trained huBERT model from Hugging Face as {model_name}...")
-        self.bert = AutoModel.from_pretrained(model_name)
-
-        # Reduced hidden size from 256 to 128 for safety
-        self.classifier = nn.Sequential(
-            nn.Linear(768, 128),
-            nn.BatchNorm1d(128),    # Keeps data centered, helps with "twisted" distributions
-            nn.ReLU(),              # Adds the curve capability
-            nn.Dropout(0.4),        # Increased Dropout (0.3 -> 0.4) for extra safety
-            nn.Linear(128, num_labels)
-        )
-        logger.info(f"Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.")
-
-    def forward(self, input_ids, attention_mask):
-        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        # Use the CLS token
-        cls_token = outputs.last_hidden_state[:, 0, :]
-        logits = self.classifier(cls_token)
-        return logits
-
-# 2. DATA: Create a Custom Dataset Class
-class HungarianTextDataset(Dataset):
-    def __init__(self, texts, labels, tokenizer, max_len=512):
-        self.texts = texts
-        self.labels = labels
-        self.tokenizer = tokenizer
-        self.max_len = max_len
-
-    def __len__(self):
-        return len(self.texts)
-
-    def __getitem__(self, idx):
-        text = str(self.texts[idx])
-        label = self.labels[idx]
-
-        # Tokenize the single text
-        encoding = self.tokenizer(
-            text,
-            truncation=True,
-            padding="max_length", # Pads to max_len
-            max_length=self.max_len,
-            return_tensors="pt"   # Returns PyTorch tensors
-        )
-
-        # Return dictionary with squeezed tensors (remove batch dim 1)
-        return {
-            'input_ids': encoding['input_ids'].squeeze(0),
-            'attention_mask': encoding['attention_mask'].squeeze(0),
-            'labels': torch.tensor(label, dtype=torch.long)
-        }
 
 def validate():
   model.eval()
@@ -92,6 +42,7 @@ def validate():
       all_labels.extend(labels.cpu().numpy())
       all_predictions.extend(predictions.cpu().numpy())
 
+      break
 
   val_loss = total_val_loss / len(val_loader)
   val_acc = total_correct_predictions / len(val_dataset) * 100  # Accuracy as a percentage
@@ -102,8 +53,9 @@ def validate():
   return val_loss, val_acc, kappa
 
 if __name__ == "__main__":
+
+    logger.info("***************** Training Started *************************")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    logger.info(f"Using device: {device} for training.")
         
     model_name = "SZTAKI-HLT/hubert-base-cc"
     model = LeanDeepHubert(model_name, num_labels = config.NUM_LABELS)
@@ -123,6 +75,7 @@ if __name__ == "__main__":
     logger.info(f"Split data into training and validation sets with {len(train_dataset)} and {len(val_dataset)} samples, respectively.")
 
 
+    logger.info(f"Using device: {device} for training.")
     logger.info(format_config_log(config, device))
     optimizer = AdamW(model.parameters(), lr=config.LEARNING_RATE)
     weights = [656/95, 656/261, 656/439, 656/641, 656/656]
@@ -157,6 +110,7 @@ if __name__ == "__main__":
                 logger.info(f"Epoch {epoch+1} | Batch {batch_idx} | Loss: {loss.item():.4f}")
 
             # Removed break to allow full epoch training
+            break
 
         avg_loss = total_loss / len(train_loader) # Corrected loader to train_loader
         logger.info(f"--> Epoch {epoch+1} Completed. Validation starting...")
@@ -166,7 +120,6 @@ if __name__ == "__main__":
             best_params = model.state_dict()
 
         logger.info(f"Training finished. Saving the best model to {config.MODEL_SAVE_PATH} and the tokenizer to {config.TOKENIZER_SAVE_PATH}...")
-        model.load_state_dict(best_params)
         tokenizer.save_pretrained(config.TOKENIZER_SAVE_PATH)
         torch.save(model.state_dict(), config.MODEL_SAVE_PATH)
         logger.info("Model and tokenizer saved successfully.")
