@@ -17,40 +17,9 @@ All data preparation steps are implemented in script *src/01-data-preprocessing.
  
 ### Logging Requirements
 
-The training process must produce a log file that captures the following essential information for grading:
-
-1.  **Configuration**: Print the hyperparameters used (e.g., number of epochs, batch size, learning rate).
-2.  **Data Processing**: Confirm successful data loading and preprocessing steps.
 3.  **Model Architecture**: A summary of the model structure with the number of parameters (trainable and non-trainable).
-4.  **Training Progress**: Log the loss and accuracy (or other relevant metrics) for each epoch.
-5.  **Validation**: Log validation metrics at the end of each epoch or at specified intervals.
-6.  **Final Evaluation**: Result of the evaluation on the test set (e.g., final accuracy, MAE, F1-score, confusion matrix).
 
-The log file must be uploaded to `log/run.log` to the repository. The logs must be easy to understand and self explanatory. 
 Ensure that `src/utils.py` is used to configure the logger so that output is directed to stdout (which Docker captures).
-
-### Submission Checklist
-
-Before submitting your project, ensure you have completed the following steps.
-**Please note that the submission can only be accepted if these minimum requirements are met.**
-
-- [ ] **Project Information**: Filled out the "Project Information" section (Topic, Name, Extra Credit).
-- [ ] **Solution Description**: Provided a clear description of your solution, model, and methodology.
-- [ ] **Extra Credit**: If aiming for +1 mark, filled out the justification section.
-- [ ] **Data Preparation**: Included a script or precise description for data preparation.
-- [ ] **Dependencies**: Updated `requirements.txt` with all necessary packages and specific versions.
-- [ ] **Configuration**: Used `src/config.py` for hyperparameters and paths, contains at least the number of epochs configuration variable.
-- [ ] **Logging**:
-    - [ ] Log uploaded to `log/run.log`
-    - [ ] Log contains: Hyperparameters, Data preparation and loading confirmation, Model architecture, Training metrics (loss/acc per epoch), Validation metrics, Final evaluation results, Inference results.
-- [ ] **Docker**:
-    - [ ] `Dockerfile` is adapted to your project needs.
-    - [ ] Image builds successfully (`docker build -t dl-project .`).
-    - [ ] Container runs successfully with data mounted (`docker run ...`).
-    - [ ] The container executes the full pipeline (preprocessing, training, evaluation).
-- [ ] **Cleanup**:
-    - [ ] Removed unused files.
-    - [ ] **Deleted this "Submission Instructions" section from the README.**
 
 ## Project Details
 
@@ -62,17 +31,19 @@ Before submitting your project, ensure you have completed the following steps.
 
 ### Solution Description
 
-Problem is classifying paragraphs from legal documents (more precisely General Terms & Conditions) based on their understandability on a scale from 1 to 5. 1 represents "uttery difficult to interpret", while 5 means "easy to comprehend". The baseline model is a logistic regression model with the following features:
+Problem is classifying paragraphs from legal documents (more precisely from General Terms & Conditions documents) based on their understandability on a scale from 1 to 5. 1 represents "uttery difficult to interpret", while 5 means "easy to comprehend". The baseline model is a logistic regression model with the following features:
   - Average sentence length of the paragraph
   - Average word lenght
   - Length in words
   - Number numbers and special characters in the paragraph 
 
-The solution is based on a pre-trained transformer model called [huBert](https://huggingface.co/SZTAKI-HLT/hubert-base-cc) which was blablabala. Two FC layers are trained alongside the pre-trained one to classify input paragraphs.
+The solution is based on a pre-trained transformer model called [huBERT](https://huggingface.co/SZTAKI-HLT/hubert-base-cc). It has the same architecture as the [BERT-base model](https://arxiv.org/abs/1810.04805) but it was specifically pre-trained on the hungarian language. More precisly, it was training on a snapshot of the Hungarian Wikipedia and on the [Hungarian Webcorpus 2.0](https://hlt.bme.hu/hu/resources/webcorpus2). The BERT-base model contains 12 stacked Transformer Encoder blocks with a hidden dimension of 768, each block having an attention layer with 12 attention heads. Futhermore, a classification head is appended to the last encoder block consisting of a hidden layer of 128 neurons and an output layer of 5 units. The classification head is trained alongside the pre-trained part. In total, this model has ~110.099k parameters and 256 non-trainable parameters corresponding to running statistics in the BatchNorm layer of the classification head.
 
-Loss function, optimizer
+For training the [AdamW](https://arxiv.org/abs/1711.05101) optimization algorithm is employed which minimizes the Cross-Entropy Loss as objective function. Regularization is only employed through dropout. There is no futher regularization penalty term in the objective function.
 
-Evaluation metrics: Recall on rare labels, [Quadratic Cohen cappa score](https://en.wikipedia.org/wiki/Cohen%27s_kappa) and confusion matrix???
+For evaluation, the project measures the performance of the baseline and the deep learing model on the following metrics: F1 score,  [Quadratic Cohen Kappa score](https://en.wikipedia.org/wiki/Cohen%27s_kappa). It also logs the confusion matrix to visualize the ability of the model to distinguish different understandibility-levels.
+
+Concerning the methodology, the model is trained through 3 epochs. After 3 epochs, the model parameters which achieved the lowest validation lost are saved. In the evaluation phase, the performances of the baseline and the fine-tuned huBERT model are evaluted on the test dataset (which consists of the consensus paragraph). At last, the model predicts the understandability score of a new input paragraph.
 
 ### Docker Instructions
 
