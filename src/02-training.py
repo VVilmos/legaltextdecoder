@@ -54,7 +54,7 @@ def validate():
 
 if __name__ == "__main__":
 
-    logger.info("***************** Training Started *************************")
+    logger.info(" ****************************** TRAINING STARTED ******************************")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
     model_name = "SZTAKI-HLT/hubert-base-cc"

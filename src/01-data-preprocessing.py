@@ -88,7 +88,6 @@ def extract_data(all_data):
     return df
 
 if __name__ == "__main__":
-    logger.info("***************** Data Preprocessing Started *************************")
     logger.info(" ****************************** DATA PREPROCESSING STARTED ******************************")
     data = load_json()
     df = extract_data(data)
