@@ -8,6 +8,7 @@
 
 [Describe the data preparation process here]
 
+Duplicated: some people used different document sources, and they labeled them in separate files, but uploaded a merged json also.
 ### Logging Requirements
 
 The training process must produce a log file that captures the following essential information for grading:

@@ -8,7 +8,7 @@ HIDDEN_SIZE = 128
 DROPOUT_RATE = 0.4
 
 # Training hyperparameters
-BATCH_SIZE = 4
+BATCH_SIZE = 2
 LEARNING_RATE = 2e-5
 NUM_EPOCHS = 1
 OPTIMIZER = "AdamW"
