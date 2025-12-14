@@ -15,8 +15,6 @@ All data preparation steps are implemented in script named *src/01-data-preproce
 - Decreasing all labels by 1 to help loss calculation based on output logits.
 - Saving non-consensus dataset as training -and validaton- dataset, and saving consensus dataset as test dataset to path *app/data/training.csv* and *app/data/test.csv*, respectively.
  
-Ensure that `src/utils.py` is used to configure the logger so that output is directed to stdout (which Docker captures).
-
 ## Project Details
 
 ### Project Information
@@ -56,6 +54,10 @@ docker build -t dl-project .
 #### Run
 
 To run the solution, use the following command. 
+
+```bash
+docker run dl-project
+```
 
 ### File Structure and Functions
 
