@@ -52,21 +52,16 @@ if __name__ == "__main__":
       loss = criterion(logits, labels)
       total_val_loss += loss.item()
 
-      # Get predictions and update total_correct_predictions
       predictions = torch.argmax(logits, dim=-1)
       total_correct_predictions += (predictions == labels).sum().item()
 
-      # Store labels and predictions for Kappa calculation
       y_test.extend(labels.cpu().numpy())
       y_pred.extend(predictions.cpu().numpy())
       
-      break
-
 
   test_loss = total_val_loss / len(test_loader)
   test_acc = total_correct_predictions / len(test_dataset) * 100 
 
-  # Calculate Quadratic Weighted Cohen Kappa score
   kappa = cohen_kappa_score(y_test, y_pred, weights='quadratic')
   f1 = f1_score(y_test, y_pred, average="weighted")
   cm = confusion_matrix(y_test, y_pred)

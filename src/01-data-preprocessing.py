@@ -14,7 +14,6 @@ logger = setup_logger()
 
 
 def _download_and_extract(url: str, target_dir: str) -> str:
-    """Download a zip archive from url and extract into target_dir."""
     os.makedirs(target_dir, exist_ok=True)
     with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
         with requests.get(url, stream=True) as r:
@@ -34,7 +33,6 @@ def _download_and_extract(url: str, target_dir: str) -> str:
 
 
 def load_json():
-    """Download dataset zip from config.DATA_URL and load all JSON files except under consensus."""
     logger.info("Downloading and extracting data...")
     temp_dir = tempfile.mkdtemp(prefix="ltdata_")
     extracted_dir = _download_and_extract(config.DATA_URL, temp_dir)
@@ -162,8 +160,8 @@ if __name__ == "__main__":
 
     logger.info("Saving training data and test data. Test dataset only consists of the paragraphs from consensus!")
     logger.info(f"Training samples: {df_other.shape[0]}, Test samples:  {df_con.shape[0]}")
-    # Save processed data
 
+    # Save processed data
     df_other.to_csv(config.TRAINING_DATA_PATH, index=False)
     df_con.to_csv(config.TEST_DATA_PATH, index=False)
     logger.info(f"Preprocessed training data saved to path {config.TRAINING_DATA_PATH}.")

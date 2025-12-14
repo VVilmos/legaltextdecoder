@@ -1,4 +1,3 @@
-from utils import setup_logger
 import torch
 import torch.nn as nn
 from transformers import AutoModel
@@ -14,12 +13,11 @@ class LeanDeepHubert(nn.Module):
         logger.info(f"Fetching pre-trained huBERT model from Hugging Face as {model_name}...")
         self.bert = AutoModel.from_pretrained(model_name)
 
-        # Reduced hidden size from 256 to 128 for safety
         self.classifier = nn.Sequential(
             nn.Linear(768, 128),
-            nn.BatchNorm1d(128),    # Keeps data centered, helps with "twisted" distributions
-            nn.ReLU(),              # Adds the curve capability
-            nn.Dropout(0.4),        # Increased Dropout (0.3 -> 0.4) for extra safety
+            nn.BatchNorm1d(128),    
+            nn.ReLU(),              
+            nn.Dropout(0.4),        
             nn.Linear(128, num_labels)
         )
         logger.info(f"Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.")

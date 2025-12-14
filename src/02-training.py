@@ -11,6 +11,7 @@ from transformers import AutoTokenizer
 from torch.optim import AdamW
 from models import LeanDeepHubert, HungarianTextDataset
 from sklearn.metrics import cohen_kappa_score
+from torchinfo import summary
 
 logger = setup_logger()
 
@@ -33,20 +34,16 @@ def validate():
       loss = criterion(logits, labels)
       total_val_loss += loss.item()
 
-      # Get predictions and update total_correct_predictions
       predictions = torch.argmax(logits, dim=-1)
       total_correct_predictions += (predictions == labels).sum().item()
 
-      # Store labels and predictions for Kappa calculation
       all_labels.extend(labels.cpu().numpy())
       all_predictions.extend(predictions.cpu().numpy())
 
-      break
 
   val_loss = total_val_loss / len(val_loader)
-  val_acc = total_correct_predictions / len(val_dataset) * 100  # Accuracy as a percentage
+  val_acc = total_correct_predictions / len(val_dataset) * 100  
 
-  # Calculate Quadratic Weighted Cohen Kappa score
   kappa = cohen_kappa_score(all_labels, all_predictions, weights='quadratic')
 
   return val_loss, val_acc, kappa
@@ -58,6 +55,7 @@ if __name__ == "__main__":
         
     model_name = "SZTAKI-HLT/hubert-base-cc"
     model = LeanDeepHubert(model_name, num_labels = config.NUM_LABELS)
+    logger.info(summary(model, verbose=0))
     logger.info(f"Loading tokenizer for model {model_name}...")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = model.to(device)
@@ -108,12 +106,10 @@ if __name__ == "__main__":
             if batch_idx % 10 == 0:
                 logger.info(f"Epoch {epoch+1} | Batch {batch_idx} | Loss: {loss.item():.4f}")
 
-            # Removed break to allow full epoch training
-            break
 
-        avg_loss = total_loss / len(train_loader) # Corrected loader to train_loader
+        avg_loss = total_loss / len(train_loader)
         logger.info(f"--> Epoch {epoch+1} Completed. Validation starting...")
-        val_loss, val_acc, kappa = validate() # Updated to receive kappa score
+        val_loss, val_acc, kappa = validate() 
         logger.info(format_epoch_log(epoch+1, avg_loss, val_loss, val_acc, kappa))
         if (val_loss < best_val_loss):
             best_params = model.state_dict()

@@ -8,9 +8,9 @@ HIDDEN_SIZE = 128
 DROPOUT_RATE = 0.4
 
 # Training hyperparameters
-BATCH_SIZE = 2
+BATCH_SIZE = 8
 LEARNING_RATE = 2e-5
-NUM_EPOCHS = 1
+NUM_EPOCHS = 3
 OPTIMIZER = "AdamW"
 LOSS_FUNCTION = "CrossEntropyLoss"
 
@@ -31,5 +31,3 @@ RAW_DATA_PATH = "./data/raw_data.csv"
 MODEL_SAVE_PATH = "./output/model/deephubert_state.bin"
 TOKENIZER_SAVE_PATH = "./output/tokenizer/leanhubert"
 
-# Logging
-LOG_INTERVAL = 10  # Log every N batches

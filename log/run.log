@@ -1,35 +1,62 @@
-[run.sh] Starting full pipeline run at 2025-12-11T16:50:38+00:00
-2025-12-11 16:50:39,896 - INFO -  ****************************** DATA PREPROCESSING STARTED ******************************
-2025-12-11 16:50:39,896 - INFO - Downloading and extracting data...
-2025-12-11 16:50:41,874 - INFO - ZIP archive downloaded, extracting...
-2025-12-11 16:50:41,933 - INFO - Extraction completed.
-2025-12-11 16:50:41,938 - INFO - Loading JSON files from extracted folders...
-2025-12-11 16:50:42,108 - INFO - Loaded 34 simple and 30 consensus JSON files.
-2025-12-11 16:50:42,108 - INFO - Parsing paragraphs and labels from JSON files...
-2025-12-11 16:50:42,108 - INFO - Parsing paragraph in consensus dataset...
-2025-12-11 16:50:42,123 - INFO - Averaging labels of consensus paragraphs...
-2025-12-11 16:50:42,131 - INFO - Parsed 595 Consensus paragraphs in total.
-2025-12-11 16:50:42,155 - INFO - Parsed 3184 non-consensus paragraphs in total.
-2025-12-11 16:50:42,187 - INFO - Raw data saved for analysis to path './data/raw_data.csv'.
-2025-12-11 16:50:42,187 - INFO - Processing training data...
-2025-12-11 16:50:42,188 - INFO - Transforming labels by subtracting 1 to make them zero-based.
-2025-12-11 16:50:42,188 - INFO - Removing duplicate paragraphs...
-2025-12-11 16:50:42,190 - INFO - Found 0 duplicate paragraphs among consensus.
-2025-12-11 16:50:42,190 - INFO - Total consensus samples after removing duplicates: 595
-2025-12-11 16:50:42,192 - INFO - Found 164 duplicate paragraphs among non-consensus.
-2025-12-11 16:50:42,194 - INFO - Total non-consensus samples after removing duplicates: 3020
-2025-12-11 16:50:42,194 - INFO - Saving training data and test data. Test dataset only consists of the paragraphs from consensus!
-2025-12-11 16:50:42,194 - INFO - Training samples: 3020, Test samples:  595
-2025-12-11 16:50:42,220 - INFO - Preprocessed training data saved to path ./data/training.csv.
-2025-12-11 16:50:42,220 - INFO - Preprocessed test data saved to path ./data/test.csv.
-2025-12-11 16:50:47,099 - INFO -  ****************************** TRAINING STARTED ******************************
-2025-12-11 16:50:47,101 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
-2025-12-11 16:51:09,907 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
-2025-12-11 16:51:09,908 - INFO - Loading tokenizer for model SZTAKI-HLT/hubert-base-cc...
-2025-12-11 16:51:11,592 - INFO - Preparing data loaders...
-2025-12-11 16:51:11,617 - INFO - Split data into training and validation sets with 2416 and 604 samples, respectively.
-2025-12-11 16:51:11,617 - INFO - Using device: cpu for training.
-2025-12-11 16:51:11,617 - INFO - Starting Training Session for SZTAKI-HLT/hubert-base-cc
+[run.sh] Starting full pipeline run at 2025-12-14T10:32:19+00:00
+2025-12-14 10:32:20,839 - INFO -  ****************************** DATA PREPROCESSING STARTED ******************************
+2025-12-14 10:32:20,839 - INFO - Downloading and extracting data...
+2025-12-14 10:32:29,874 - INFO - ZIP archive downloaded, extracting...
+2025-12-14 10:32:29,962 - INFO - Extraction completed.
+2025-12-14 10:32:29,971 - INFO - Loading JSON files from extracted folders...
+2025-12-14 10:32:30,254 - INFO - Loaded 34 simple and 30 consensus JSON files.
+2025-12-14 10:32:30,255 - INFO - Parsing paragraphs and labels from JSON files...
+2025-12-14 10:32:30,255 - INFO - Parsing paragraph in consensus dataset...
+2025-12-14 10:32:30,280 - INFO - Averaging labels of consensus paragraphs...
+2025-12-14 10:32:30,283 - INFO - Parsed 595 Consensus paragraphs in total.
+2025-12-14 10:32:30,320 - INFO - Parsed 3184 non-consensus paragraphs in total.
+2025-12-14 10:32:30,382 - INFO - Raw data saved for analysis to path './data/raw_data.csv'.
+2025-12-14 10:32:30,382 - INFO - Processing training data...
+2025-12-14 10:32:30,383 - INFO - Transforming labels by subtracting 1 to make them zero-based.
+2025-12-14 10:32:30,383 - INFO - Removing duplicate paragraphs...
+2025-12-14 10:32:30,385 - INFO - Found 0 duplicate paragraphs among consensus.
+2025-12-14 10:32:30,386 - INFO - Total consensus samples after removing duplicates: 595
+2025-12-14 10:32:30,388 - INFO - Found 164 duplicate paragraphs among non-consensus.
+2025-12-14 10:32:30,390 - INFO - Total non-consensus samples after removing duplicates: 3020
+2025-12-14 10:32:30,390 - INFO - Saving training data and test data. Test dataset only consists of the paragraphs from consensus!
+2025-12-14 10:32:30,390 - INFO - Training samples: 3020, Test samples:  595
+2025-12-14 10:32:30,433 - INFO - Preprocessed training data saved to path ./data/training.csv.
+2025-12-14 10:32:30,433 - INFO - Preprocessed test data saved to path ./data/test.csv.
+2025-12-14 10:32:34,965 - INFO -  ****************************** TRAINING STARTED ******************************
+2025-12-14 10:32:34,966 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
+2025-12-14 10:34:20,378 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
+2025-12-14 10:34:20,551 - INFO - =====================================================================================
+Layer (type:depth-idx)                                       Param #
+=====================================================================================
+LeanDeepHubert                                               --
+├─BertModel: 1-1                                             --
+│    └─BertEmbeddings: 2-1                                   --
+│    │    └─Embedding: 3-1                                   24,576,768
+│    │    └─Embedding: 3-2                                   393,216
+│    │    └─Embedding: 3-3                                   1,536
+│    │    └─LayerNorm: 3-4                                   1,536
+│    │    └─Dropout: 3-5                                     --
+│    └─BertEncoder: 2-2                                      --
+│    │    └─ModuleList: 3-6                                  85,054,464
+│    └─BertPooler: 2-3                                       --
+│    │    └─Linear: 3-7                                      590,592
+│    │    └─Tanh: 3-8                                        --
+├─Sequential: 1-2                                            --
+│    └─Linear: 2-4                                           98,432
+│    └─BatchNorm1d: 2-5                                      256
+│    └─ReLU: 2-6                                             --
+│    └─Dropout: 2-7                                          --
+│    └─Linear: 2-8                                           645
+=====================================================================================
+Total params: 110,717,445
+Trainable params: 110,717,445
+Non-trainable params: 0
+=====================================================================================
+2025-12-14 10:34:20,558 - INFO - Loading tokenizer for model SZTAKI-HLT/hubert-base-cc...
+2025-12-14 10:34:21,987 - INFO - Preparing data loaders...
+2025-12-14 10:34:22,019 - INFO - Split data into training and validation sets with 2416 and 604 samples, respectively.
+2025-12-14 10:34:22,020 - INFO - Using device: cpu for training.
+2025-12-14 10:34:22,020 - INFO - Starting Training Session for SZTAKI-HLT/hubert-base-cc
 --------------------------------------------------
    > Optimizer:       AdamW
    > Loss Function:   CrossEntropyLoss
@@ -39,19 +66,19 @@
    > Epochs:          1
    > Device:          cpu
 --------------------------------------------------
-2025-12-11 16:51:15,959 - INFO - Epoch 1 | Batch 0 | Loss: 1.7338
-2025-12-11 16:51:16,006 - INFO - --> Epoch 1 Completed. Validation starting...
-2025-12-11 16:51:17,269 - INFO - Validation Results for Epoch 1 
+2025-12-14 10:34:26,884 - INFO - Epoch 1 | Batch 0 | Loss: 2.5239
+2025-12-14 10:34:26,885 - INFO - --> Epoch 1 Completed. Validation starting...
+2025-12-14 10:34:27,631 - INFO - Validation Results for Epoch 1 
 --------------------------------------------------
-   > Average Train Loss:      0.0014
-   > Average Val Loss:        0.0048
-   > Average Val Acc:         0.1656
+   > Average Train Loss:      0.0021
+   > Average Val Loss:        0.0053
+   > Average Val Acc:         0.0000
    > Quadratic Weighted Kappa: 0.0000
 --------------------------------------------------
-2025-12-11 16:51:17,282 - INFO - Training finished. Saving the best model to ./output/model/deephubert_state.bin and the tokenizer to ./output/tokenizer/leanhubert...
-2025-12-11 16:51:18,161 - INFO - Model and tokenizer saved successfully.
-2025-12-11 16:51:33,170 - INFO -  ****************************** EVALUATION STARTED ******************************
-2025-12-11 16:51:33,491 - INFO -  
+2025-12-14 10:34:27,634 - INFO - Training finished. Saving the best model to ./output/model/deephubert_state.bin and the tokenizer to ./output/tokenizer/leanhubert...
+2025-12-14 10:34:29,354 - INFO - Model and tokenizer saved successfully.
+2025-12-14 10:34:34,209 - INFO -  ****************************** EVALUATION STARTED ******************************
+2025-12-14 10:34:34,521 - INFO -  
 --------------------------------------------------
  BASELINE MODEL CONFIGURATION AND REPORT
 --------------------------------------------------
@@ -81,37 +108,37 @@
  4        |       11       33       31       63       83
  5        |        6       10        8       10       86
 ============================================================
-2025-12-11 16:51:33,492 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
-2025-12-11 16:51:35,220 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
-2025-12-11 16:51:36,307 - INFO - Model parameters loaded from ./output/model/deephubert_state.bin for evaluation.
-2025-12-11 16:51:36,307 - INFO - Loading tokenizer...
-2025-12-11 16:51:36,342 - INFO - Tokenizer loaded from ./output/tokenizer/leanhubert.
-2025-12-11 16:51:36,343 - INFO - Preparing test dataloader...
-2025-12-11 16:51:36,354 - INFO - Testloader ready, starting evaluation of fine-tuned huBERT model...
-2025-12-11 16:51:37,403 - INFO - 
+2025-12-14 10:34:34,521 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
+2025-12-14 10:34:36,235 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
+2025-12-14 10:34:37,220 - INFO - Model parameters loaded from ./output/model/deephubert_state.bin for evaluation.
+2025-12-14 10:34:37,220 - INFO - Loading tokenizer...
+2025-12-14 10:34:37,244 - INFO - Tokenizer loaded from ./output/tokenizer/leanhubert.
+2025-12-14 10:34:37,245 - INFO - Preparing test dataloader...
+2025-12-14 10:34:37,251 - INFO - Testloader ready, starting evaluation of fine-tuned huBERT model...
+2025-12-14 10:34:38,042 - INFO - 
 ============================================================
  huBERT MODEL PERFORMANCE REPORT
 ============================================================
- Test Loss:       0.0052
- Test Acc:       0.1681
- F1 Score (Weighted):       0.3333
+ Test Loss:       0.0057
+ Test Acc:       0.0000
+ F1 Score (Weighted):       0.0000
  Quadratic Weighted Kappa:  0.0000
 ------------------------------------------------------------
  CONFUSION MATRIX (Rows=True, Cols=Predicted):
                   1        2        3        4        5
  -----------------------------------------------------
- 1        |        1        0
- 2        |        1        0
+ 1        |        0        0        0
+ 2        |        1        0        0
+ 3        |        1        0        0
 ============================================================
-2025-12-11 16:51:41,662 - INFO -  ****************************** INFERENCE DEMONSTRATION STARTED ******************************
-2025-12-11 16:51:41,662 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
-2025-12-11 16:51:42,840 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
-2025-12-11 16:51:43,496 - INFO - Model parameters loaded from ./output/model/deephubert_state.bin for inference.
-2025-12-11 16:51:43,496 - INFO - Loading tokenizer...
-2025-12-11 16:51:43,522 - INFO - Tokenizer loaded from ./output/tokenizer/leanhubert.
-2025-12-11 16:51:43,523 - INFO - Predicting understandability for the input paragraph without newline characters:
-2025-12-11 16:51:43,523 - INFO - 
+2025-12-14 10:34:41,880 - INFO -  ****************************** INFERENCE DEMONSTRATION STARTED ******************************
+2025-12-14 10:34:41,880 - INFO - Fetching pre-trained huBERT model from Hugging Face as SZTAKI-HLT/hubert-base-cc...
+2025-12-14 10:34:43,565 - INFO - Classification head initialized with hidden size 128 and dropout 0.4, consisting of two Fully Connected layers.
+2025-12-14 10:34:44,431 - INFO - Model parameters loaded from ./output/model/deephubert_state.bin for inference.
+2025-12-14 10:34:44,431 - INFO - Loading tokenizer...
+2025-12-14 10:34:44,454 - INFO - Tokenizer loaded from ./output/tokenizer/leanhubert.
+2025-12-14 10:34:44,456 - INFO - Predicting understandability for the input paragraph without newline characters:
+2025-12-14 10:34:44,456 - INFO - 
  Az Alza a reklamáció beérkezését követően haladéktalanul létrehozza a reklamáció sorszámát („RMA szám”). Az RMA szám létrehozása csak a reklamáció beérkezését erősíti meg, a reklamációs igény elbírálására ebben a fázisban nem kerül sor. Ezt követően az Alza „Reklamációs igénylap” elnevezésű dokumentumot készít a reklamációról. Ezen dokumentum felel meg a fogyasztó és vállalkozás közötti szerződés keretében eladott dolgokra vonatkozó szavatossági és jótállási igények intézésének eljárási szabályairól szóló 19/2014. (IV. 29.) NGM rendelet 4 §-a szerinti jegyzőkönyvnek. Ezen Reklamációs Igénylap tartalmazza a Fogyasztó adatait, a reklamáció tárgyát képző termék elnevezését, vételárát, a Felek között létrejött szerződésről kiállított számlán szereplő dátumot, a hiba bejelentésének időpontját, a hiba leírását és a Fogyasztó által érvényesíteni kívánt reklamációs igényt is.
-Asking to truncate to max_length but no maximum length is provided and the model has no predefined maximum length. Default to no truncation.
-2025-12-11 16:51:43,756 - INFO - Predicted understandability: 3
-[run.sh] Pipeline finished at 2025-12-11T16:51:44+00:00
+2025-12-14 10:34:44,612 - INFO - Predicted understandability: 2
+[run.sh] Pipeline finished at 2025-12-14T10:34:45+00:00

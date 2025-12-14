@@ -2,23 +2,19 @@
 
 ### Data Preparation
 
-All data preparation steps are implemented in script *src/01-data-preprocessing.py* script. The process consits of the following steps:
+All data preparation steps are implemented in script named *src/01-data-preprocessing.py*. The process consits of the following steps:
 - Downloading the ZIP archive from [BME sharepoint](https://bmeedu-my.sharepoint.com/:u:/g/personal/gyires-toth_balint_vik_bme_hu/IQDYwXUJcB_jQYr0bDfNT5RKARYgfKoH97zho3rxZ46KA1I?e=iFp3iz&download=1).
 - Extracting its content to a temporary directory
 - Iterating through all its subdirectories and loading all JSON files. The ones located in *legaltextdecoder/consensus* directory are loaded to a separate collection.
 - Parsing the texts/paragraphs and the labels from the JSON files:
-- First, the consensus paragraphs are parsed and their labels are calculated from the group average, then rounded.
-- Second, the rest of the paragraphs (non-consensus) are parsed. If a paragraph is already in the consensus dataset, it is dropped.
+    - First, the consensus paragraphs are parsed and their labels are calculated from the group average, then rounded.
+    - Second, the rest of the paragraphs (non-consensus) are parsed. If a paragraph is already in the consensus dataset, it is dropped.
 
 - At this stage, the raw data is saved to path *./data/raw_data.csv*
 - Dropping the duplicates from all datasets (Note: it is only relevant in the non-consensus dataset, as there were paragraphs uploaded in separate and merged collections as well by some students.)
-- Decreasing all labels by 1 to help loss calculation based on output logits
+- Decreasing all labels by 1 to help loss calculation based on output logits.
 - Saving non-consensus dataset as training -and validaton- dataset, and saving consensus dataset as test dataset to path *app/data/training.csv* and *app/data/test.csv*, respectively.
  
-### Logging Requirements
-
-3.  **Model Architecture**: A summary of the model structure with the number of parameters (trainable and non-trainable).
-
 Ensure that `src/utils.py` is used to configure the logger so that output is directed to stdout (which Docker captures).
 
 ## Project Details

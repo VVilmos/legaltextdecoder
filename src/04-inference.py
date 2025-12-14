@@ -13,18 +13,16 @@ def predict_understandability(paragraph):
         paragraph,
         return_tensors="pt",
         padding=True,
-        truncation=True,
-        return_token_type_ids=False,
+        return_token_type_ids=False
     )
 
-    # Safety: drop token_type_ids if tokenizer still returns it
     inputs.pop("token_type_ids", None)
 
     with torch.no_grad():
         inputs = {key: value.to(device) for key, value in inputs.items()}
         outputs = model(**inputs)
         logits = outputs if isinstance(outputs, torch.Tensor) else outputs.logits
-        prediction = int(torch.argmax(logits, dim=-1).item())
+        prediction = int(torch.argmax(logits, dim=-1).item())+1
 
     return prediction
        
